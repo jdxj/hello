@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-dep
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello
+  template:
+    metadata:
+      name: hello-pod
+      labels:
+        app: hello
+    spec:
+      containers:
+        - name: hello-c
+          image: jdxj/hello:v0.1.0
+          command: [ "/hello/main.run" ]
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - containerPort: 8080
+              protocol: TCP
